@@ -24,18 +24,18 @@ function check(aid,sid) {
             return false;
     }
     if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
-        var loadDateTime = new Date();
-        window.setTimeout(function() {
-         var timeOutDateTime = new Date();
-         if (timeOutDateTime - loadDateTime < 5000) {
+        // var loadDateTime = new Date();
+        // window.setTimeout(function() {
+        //  var timeOutDateTime = new Date();
+        //  if (timeOutDateTime - loadDateTime < 5000) {
         
-         window.location = "http://www.izhuixun.com/index.php/jump/"
-         } else {
-          window.close();
-         }
-        },
-        25);
-        window.location = "izhuixun://51wndk.net.cn/newsinfo??aid=152&sid=19";
+        //  window.location = "http://www.izhuixun.com/index.php/jump/"
+        //  } else {
+        //   window.close();
+        //  }
+        // },
+        // 25);
+        window.location = "izhuixun://51wndk.net.cn/newsinfo?aid=152&sid=19";
         //    window.location = "izhuixun://51wndk.net.cn/newsinfo?aid="+aid+"&sid="+sid;
        //  window.location = "izhuixun://[izhuixun:8080]/newsinfo/?aid=152&sid=19";
          
