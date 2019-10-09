@@ -35,7 +35,7 @@ function check(aid,sid) {
         //  }
         // },
         // 25);
-        window.location.href = "wpt://newsinfo?aid=152&sid=19";
+        window.location.href = "izhuixun://newsinfo?aid=152&sid=19";
         // window.location = "izhuixun://newsinfo?aid=152&sid=19";
         //    window.location = "izhuixun://51wndk.net.cn/newsinfo?aid="+aid+"&sid="+sid;
        //  window.location = "izhuixun://[izhuixun:8080]/newsinfo/?aid=152&sid=19";
