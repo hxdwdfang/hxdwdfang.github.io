@@ -1,1 +1,220 @@
-hello world
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>新闻详情</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<script language="javascript">
+    "use strict";
+    var Dpr = 1,
+        uAgent = window.navigator.userAgent;
+    var isIOS = uAgent.match(/iphone/i);
+    var isYIXIN = uAgent.match(/yixin/i);
+    var is2345 = uAgent.match(/Mb2345/i);
+    var ishaosou = uAgent.match(/mso_app/i);
+    var isSogou = uAgent.match(/sogoumobilebrowser/ig);
+    var isLiebao = uAgent.match(/liebaofast/i);
+    var isGnbr = uAgent.match(/GNBR/i);
+    var $fixed = document.getElementById("fixed");
+
+    function resizeRoot() {
+        var wWidth = (screen.width > 0) ? (window.innerWidth >= screen.width || window.innerWidth == 0) ? screen.width :
+            window.innerWidth : window.innerWidth,
+            wDpr, wFsize;
+        var wHeight = (screen.height > 0) ? (window.innerHeight >= screen.height || window.innerHeight == 0) ? screen
+            .height : window.innerHeight : window.innerHeight;
+        if (window.devicePixelRatio) {
+            wDpr = window.devicePixelRatio;
+        } else {
+            wDpr = isIOS ? wWidth > 818 ? 3 : wWidth > 480 ? 2 : 1 : 1;
+        }
+        if (isIOS) {
+            wWidth = screen.width;
+            wHeight = screen.height;
+        }
+        // if(window.orientation==90||window.orientation==-90){
+        //     wWidth = wHeight;
+        // }else if((window.orientation==180||window.orientation==0)){
+        // }
+        if (wWidth > wHeight) {
+            wWidth = wHeight;
+        }
+        wFsize = wWidth > 1080 ? 144 : wWidth / 7.5;
+        wFsize = wFsize > 32 ? wFsize : 32;
+        if (wFsize > 100) wFsize = 100;
+        window.screenWidth_ = wWidth;
+        if (isYIXIN || is2345 || ishaosou || isSogou || isLiebao ||
+            isGnbr) { //YIXIN 和 2345 这里有个刚调用系统浏览器时候的bug，需要一点延迟来获取
+            setTimeout(function () {
+                wWidth = (screen.width > 0) ? (window.innerWidth >= screen.width || window.innerWidth == 0) ?
+                    screen.width : window.innerWidth : window.innerWidth;
+                wHeight = (screen.height > 0) ? (window.innerHeight >= screen.height || window.innerHeight ==
+                    0) ? screen.height : window.innerHeight : window.innerHeight;
+                wFsize = wWidth > 1080 ? 144 : wWidth / 7.5;
+                wFsize = wFsize > 32 ? wFsize : 32;
+                // document.getElementsByTagName('html')[0].dataset.dpr = wDpr;
+                document.getElementsByTagName('html')[0].style.fontSize = wFsize + 'px';
+                if ($fixed) {
+                    $fixed.style.display = "none";
+                }
+            }, 500);
+        } else {
+            // document.getElementsByTagName('html')[0].dataset.dpr = wDpr;
+            document.getElementsByTagName('html')[0].style.fontSize = wFsize + 'px';
+            if ($fixed) {
+                $fixed.style.display = "none";
+            }
+        }
+        // alert("fz="+wFsize+";dpr="+window.devicePixelRatio+";UA="+uAgent+";width="+wWidth+";sw="+screen.width+";wiw="+window.innerWidth+";wsw="+window.screen.width+window.screen.availWidth);
+    }
+    resizeRoot();
+    /**
+     * [修复android SDK ＜ 19 的时候出现的viewPort不正确问题，延时200ms、5次。@!Important!@依赖于index的window.screenWidth_ = wWidth;]
+     * [viewPort改变的时候回想浏览器发送通知viewPort:changed]
+     * @param  {[int]} delay [延时ms，默认200ms]
+     * @param  {[int]} times [次数，默认5次]
+     */
+    var reviseViewPort = function (delay, times) {
+        var _delay = delay || 200,
+            count = 0,
+            max_count = times || 5;
+        var timer = setInterval(function () {
+            var _width = (screen.width > 0) ? (window.innerWidth >= screen.width) ? screen.width : window
+                .innerWidth : window.innerWidth,
+                _wFsize;
+            if (_width < window.screenWidth_) {
+                window.screenWidth_ = _width;
+                //$(window).trigger('viewPort:changed', _width);
+                _wFsize = _width > 1080 ? 144 : _width / 7.5;
+                _wFsize = _wFsize > 32 ? _wFsize : 32;
+                document.getElementsByTagName('html')[0].style.fontSize = _wFsize + 'px';
+                clearInterval(timer);
+            } else {
+                count++;
+            }
+            if (count >= max_count) {
+                clearInterval(timer);
+            }
+        }, _delay);
+    };
+    reviseViewPort(200);
+</script>
+
+<body>
+    <div class="container">
+        <div class="js-analysis js-delegate">
+
+            <section class="g-article js-article">
+                <div class="js-article-inner">
+                    <h1 class="g-title"></h1>
+                    <div class="g-subtitle"> <b class="g-type"></b><span class="g-time"></span> </div>
+                    <article class="g-main-content js-main-content active">
+                        <main class="content">
+
+                        </main>
+                        <footer>
+                            <div class="footer clearfix"> 责任编辑： <span class="author"></span> <span
+                                    class="like js-like"><i class="icon-like"></i></span></div>
+                        </footer>
+
+                    </article>
+                </div>
+                <div class="show-more-wrap">
+                    <div class="more-article js-more-article"><span></span></div>
+                </div>
+            </section>
+            <section class="g-btn-open-newsapp"><a class="js-open-newsapp" style="cursor: pointer;">打开追讯App 查看完整专题</a>
+            </section>
+            <section class="g-footer u-hide-in-newsapp js-open-newsapp" data-stat="o-motif-footer">
+                <img src="img/test.png">
+                <div class="info">
+                    <div class="title">打开追讯App,查看完整专题!</div>
+                    <div class="subtitle"></div>
+                </div>
+                <div class="button">打开</div>
+            </section>
+
+            <section class="redpacket-wrap"></section>
+        </div>
+    </div>
+
+    <div class="toast-wrap active">
+        <div class="mask"></div>
+        <div class="toast">
+
+            <div class="bg-saf">
+              
+            </div>
+            <div id="wrapper">
+                <div id="contentwrapper">
+                    <div id="contentfull">
+                        <div class="post" id="post-63">
+                            <div class="entry">
+
+                                <p style="text-align:center">如果您已安装 【<strong>追讯</strong>】</p>
+                                <p style="text-align:center">点击右上角 【 ··· 】</p>
+                               <p style="text-align:center">选择 <u>在Safari中打开</u></p>
+                                <p class="has-medium-font-size">　</p>
+                                <p></p>
+                                <div class="wp-block-button aligncenter"><a
+                                        class="wp-block-button__link has-background has-vivid-red-background-color">未安装请点击打开App
+                                        Store下载 <strong>追讯</strong></a></div>
+                                <p></p>
+
+                               <div id="comments" class="comments-area">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="copyinfo">
+                    © 2019
+               &nbsp; &nbsp;粤ICP备19045007 &nbsp; 东莞市逐浪科技有限公司 DongGuan Zhulang Technology Co.,ltd &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    $(function () {
+        $(".show-more-wrap").click(function () {
+            $('.g-article ').addClass('show-all')
+            $(this).hide();
+            $('.g-btn-open-newsapp').hide();
+        })
+        // $('.js-open-newsapp').click(function () {
+
+        //     check();
+        // });
+        $(".mask").click(function () {
+            $('.toast-wrap').hide();
+        });
+
+    })
+    // function check() {
+    //     console.log('hahha')
+    //     if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+    //         var loadDateTime = new Date();
+    //         window.setTimeout(function () {
+    //                 var timeOutDateTime = new Date();
+
+    //                 if (timeOutDateTime - loadDateTime < 5000) {
+    //                     window.location = "./dowload.html";
+    //                 } else {
+    //                     window.close();
+    //                 }
+    //             },
+    //             25);
+    //         window.location = "newsapp:// ";
+
+    //     } 
+    // }
+</script>
